@@ -46,7 +46,7 @@ This repository contains a sample MCP server implementation that provides stock 
 
 Start the development server:
 ```
-npm start
+npm run dev
 ```
 
 The server will be running at `http://localhost:3000`.
