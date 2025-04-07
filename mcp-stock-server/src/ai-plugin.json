@@ -1,0 +1,17 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Stock Info Test",
+  "name_for_model": "stockInfoTest",
+  "description_for_human": "Get stock prices and history",
+  "description_for_model": "Plugin for retrieving current stock quotes and historical stock prices.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "http://localhost:3000/openapi.json"
+  },
+  "logo_url": "http://localhost:3000/logo.png",
+  "contact_email": "test@example.com",
+  "legal_info_url": "http://localhost:3000/example"
+}

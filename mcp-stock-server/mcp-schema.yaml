@@ -1,0 +1,88 @@
+swagger: '2.0'
+info:
+  title: Stock Info MCP Server
+  description: MCP server that provides stock quote and history tools via SSE for integration with Microsoft Copilot Studio.
+  version: 1.0.0
+
+host: localhost:3000
+basePath: /
+schemes:
+  - http
+
+paths:
+  /sse:
+    get:
+      summary: Start SSE connection
+      description: Opens an SSE connection for a session.
+      operationId: startSseSession
+      parameters: []
+      produces:
+        - text/event-stream
+      responses:
+        '200':
+          description: SSE stream started
+      tags:
+        - Agentic
+        - McpSse
+
+  /messages:
+    post:
+      summary: Post message to MCP server
+      description: Sends a request to the MCP server using JSON-RPC format.
+      operationId: postMcpMessage
+      parameters:
+        - name: sessionId
+          in: query
+          required: true
+          type: string
+          description: The session ID obtained from the /sse connection.
+        - in: body
+          name: jsonRpcRequest
+          required: true
+          schema:
+            $ref: '#/definitions/JsonRpcRequest'
+      responses:
+        '200':
+          description: Request accepted and response returned
+          schema:
+            $ref: '#/definitions/JsonRpcResponse'
+        '400':
+          description: Invalid session or bad request
+      tags:
+        - Agentic
+        - McpSse
+
+definitions:
+  JsonRpcRequest:
+    type: object
+    required:
+      - jsonrpc
+      - id
+      - method
+    properties:
+      jsonrpc:
+        type: string
+        example: "2.0"
+      id:
+        type: string
+        example: "abc123"
+      method:
+        type: string
+        example: "get-stock-quote"
+      params:
+        type: object
+        description: Parameters for the method
+
+  JsonRpcResponse:
+    type: object
+    required:
+      - jsonrpc
+      - id
+    properties:
+      jsonrpc:
+        type: string
+      id:
+        type: string
+      result:
+        type: object
+        description: The result returned from the tool
