@@ -39,58 +39,6 @@
           }
         }
       }
-    },
-    "/get-stock-history": {
-      "get": {
-        "operationId": "get-stock-history",
-        "summary": "Get historical stock data for a symbol",
-        "parameters": [
-          {
-            "name": "symbol",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "The stock ticker symbol (e.g., AAPL)"
-          },
-          {
-            "name": "range",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": ["1d", "5d", "1m", "6m", "1y"]
-            },
-            "description": "Time range for the history (e.g., 1d, 1y)"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful stock history response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "symbol": { "type": "string" },
-                    "history": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "date": { "type": "string", "format": "date" },
-                          "close": { "type": "number" }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
   }
 }

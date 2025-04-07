@@ -6,7 +6,6 @@ import { z } from 'zod';
 import dotenv from 'dotenv';
 import path from 'path';
 import { getStockQuote } from './tools/getStockQuote';
-import { getStockHistory } from './tools/getStockHistory';
 
 dotenv.config();
 
@@ -29,24 +28,6 @@ mcpServer.tool(
   { symbol: z.string() },
   async ({ symbol }: {symbol: string}) => {
     const result = await getStockQuote(symbol);
-    if ('error' in result) throw new Error(result.error);
-
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify(result, null, 2)
-        }
-      ]
-    };
-  }
-);
-
-mcpServer.tool(
-  'get-stock-history',
-  { symbol: z.string(), range: z.string() },
-  async ({ symbol, range }: {symbol: string, range: string}) => {
-    const result = await getStockHistory(symbol, range);
     if ('error' in result) throw new Error(result.error);
 
     return {
