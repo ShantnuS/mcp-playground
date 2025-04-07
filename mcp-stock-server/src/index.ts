@@ -6,6 +6,7 @@ import { z } from 'zod';
 import dotenv from 'dotenv';
 import path from 'path';
 import { getStockQuote } from './tools/getStockQuote';
+import { getReportedFinancials } from './tools/getReportedFinancials';
 
 dotenv.config();
 
@@ -28,6 +29,24 @@ mcpServer.tool(
   { symbol: z.string() },
   async ({ symbol }: {symbol: string}) => {
     const result = await getStockQuote(symbol);
+    if ('error' in result) throw new Error(result.error);
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
+    };
+  }
+);
+
+mcpServer.tool(
+  'get-reported-financials',
+  { symbol: z.string() },
+  async ({ symbol }: {symbol: string}) => {
+    const result = await getReportedFinancials(symbol);
     if ('error' in result) throw new Error(result.error);
 
     return {

@@ -39,6 +39,53 @@
           }
         }
       }
+    },
+    "/get-reported-financials": {
+      "get": {
+        "operationId": "get-reported-financials",
+        "summary": "Get reported financial data for a company",
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The stock ticker symbol (e.g., AAPL)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful financial data response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "symbol": { "type": "string" },
+                    "companyName": { "type": "string" },
+                    "fiscalDate": { "type": "string" },
+                    "reportDate": { "type": "string" },
+                    "totalRevenue": { "type": "number" },
+                    "netIncome": { "type": "number" },
+                    "epsBasic": { "type": "number" },
+                    "epsDiluted": { "type": "number" },
+                    "grossProfit": { "type": "number" },
+                    "operatingIncome": { "type": "number" },
+                    "ebitda": { "type": "number" },
+                    "cashAndCashEquivalents": { "type": "number" },
+                    "totalAssets": { "type": "number" },
+                    "totalLiabilities": { "type": "number" },
+                    "shareholdersEquity": { "type": "number" },
+                    "reportLink": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
