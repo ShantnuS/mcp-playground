@@ -1,91 +1,54 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.0.1",
   "info": {
     "title": "Stock Info MCP Server",
-    "version": "1.0.0",
-    "description": "Exposes stock quote and history tools for use via MCP."
+    "version": "1.0.0"
   },
   "paths": {
-    "/get-stock-quote": {
-      "get": {
-        "operationId": "get-stock-quote",
-        "summary": "Get stock quote for a symbol",
+    "/messages": {
+      "post": {
+        "summary": "Send a message to the MCP server",
         "parameters": [
           {
-            "name": "symbol",
+            "name": "sessionId",
             "in": "query",
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "description": "The stock ticker symbol (e.g., AAPL)"
+            }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "Successful stock quote",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "symbol": { "type": "string" },
-                    "price": { "type": "number" },
-                    "currency": { "type": "string" }
-                  }
-                }
+        "requestBody": {
+          "description": "Message body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message accepted"
+          },
+          "400": {
+            "description": "No transport found for sessionId"
           }
         }
       }
     },
-    "/get-reported-financials": {
+    "/sse": {
       "get": {
-        "operationId": "get-reported-financials",
-        "summary": "Get reported financial data for a company",
-        "parameters": [
-          {
-            "name": "symbol",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "The stock ticker symbol (e.g., AAPL)"
-          }
-        ],
+        "summary": "Establish a Server-Sent Events connection",
         "responses": {
           "200": {
-            "description": "Successful financial data response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "symbol": { "type": "string" },
-                    "companyName": { "type": "string" },
-                    "fiscalDate": { "type": "string" },
-                    "reportDate": { "type": "string" },
-                    "totalRevenue": { "type": "number" },
-                    "netIncome": { "type": "number" },
-                    "epsBasic": { "type": "number" },
-                    "epsDiluted": { "type": "number" },
-                    "grossProfit": { "type": "number" },
-                    "operatingIncome": { "type": "number" },
-                    "ebitda": { "type": "number" },
-                    "cashAndCashEquivalents": { "type": "number" },
-                    "totalAssets": { "type": "number" },
-                    "totalLiabilities": { "type": "number" },
-                    "shareholdersEquity": { "type": "number" },
-                    "reportLink": { "type": "string" }
-                  }
-                }
-              }
-            }
+            "description": "SSE stream opened"
           }
         }
       }
     }
-  }
+  },
+  "components": {}
 }
