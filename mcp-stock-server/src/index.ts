@@ -19,6 +19,10 @@ app.use((req, res, next) => {
   express.json()(req, res, next); // apply to others
 });
 
+app.use(express.static(path.join(process.cwd(), 'public'), {
+  dotfiles: 'allow'
+}));
+
 const mcpServer = new McpServer({
   name: 'Stock Info MCP Server',
   version: '1.0.0'
@@ -26,6 +30,7 @@ const mcpServer = new McpServer({
 
 mcpServer.tool(
   'get-stock-quote',
+  'Returns the current stock quote for a given stock ticker symbol.',
   { symbol: z.string() },
   async ({ symbol }: {symbol: string}) => {
     const result = await getStockQuote(symbol);
@@ -39,11 +44,12 @@ mcpServer.tool(
         }
       ]
     };
-  }
+  },
 );
 
 mcpServer.tool(
   'get-reported-financials',
+  'Fetches the latest reported financials for a given stock ticker symbol.',
   { symbol: z.string() },
   async ({ symbol }: {symbol: string}) => {
     const result = await getReportedFinancials(symbol);
@@ -57,7 +63,7 @@ mcpServer.tool(
         }
       ]
     };
-  }
+  },
 );
 
 const transports: Record<string, InstanceType<typeof SSEServerTransport>> = {};
@@ -81,18 +87,6 @@ app.post('/messages', async (req: Request, res: Response) => {
   } else {
     res.status(400).send('No transport found for sessionId');
   }
-});
-
-app.get('/openapi.json', (_, res) => {
-  res.sendFile(path.join(__dirname, 'openapi.json'));
-});
-
-app.get('/.well-known/ai-plugin.json', (_, res) => {
-  res.sendFile(path.join(__dirname, 'ai-plugin.json'));
-});
-
-app.get('/logo.png', (_, res) => {
-  res.sendFile(path.join(__dirname, 'logo.png'));
 });
 
 const PORT = process.env.PORT || 3000;
