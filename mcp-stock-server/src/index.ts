@@ -68,8 +68,12 @@ mcpServer.tool(
 
 const transports: Record<string, InstanceType<typeof SSEServerTransport>> = {};
 
-app.get('/sse', async (_req: Request, res: Response) => {
-  const transport = new SSEServerTransport('/messages', res);
+app.get('/sse', async (req: Request, res: Response) => {
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const host = req.headers.host;
+  const fullBaseUrl = `${protocol}://${host}/messages`;
+
+  const transport = new SSEServerTransport(fullBaseUrl, res);
   transports[transport.sessionId] = transport;
 
   res.on('close', () => {
